@@ -1,0 +1,53 @@
+@model Xohararik.Web.ViewModels.IngredientFormViewModel
+@{
+    bool isEdit = Model.Id != 0;
+    ViewData["Title"] = isEdit ? "Edit Ingredient" : "Create Ingredient";
+    string formAction = isEdit ? $"/Admin/Ingredients/Edit/{Model.Id}" : "/Admin/Ingredients/Create";
+}
+
+<h2 class="fw-bold mb-4">
+    <i class="bi bi-@(isEdit ? "pencil" : "plus-circle") me-2 text-warning"></i>@ViewData["Title"]
+</h2>
+
+<div class="card shadow-sm" style="max-width:600px;">
+    <div class="card-body">
+        <form action="@formAction" method="post" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label class="form-label fw-semibold">Name</label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger small"></span>
+            </div>
+            <div class="mb-3">
+                <label class="form-label fw-semibold">Category</label>
+                <select asp-for="CategoryId" asp-items="Model.Categories" class="form-select">
+                    <option value="">-- Select Category --</option>
+                </select>
+                <span asp-validation-for="CategoryId" class="text-danger small"></span>
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-semibold">Calories per 100g</label>
+                    <input asp-for="CaloriesPer100g" type="number" step="0.1" class="form-control" />
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-semibold">Default Weight (g)</label>
+                    <input asp-for="DefaultWeight" type="number" class="form-control" />
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label fw-semibold">Image URL (optional)</label>
+                <input asp-for="ImageUrl" class="form-control" placeholder="/images/ingredients/example.png" />
+            </div>
+            <div class="mb-3">
+                <label class="form-label fw-semibold">Or Upload Image</label>
+                <input asp-for="ImageFile" type="file" class="form-control" accept="image/*" />
+            </div>
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-warning fw-bold">
+                    <i class="bi bi-save me-1"></i>@(isEdit ? "Save Changes" : "Create")
+                </button>
+                <a href="/Admin/Ingredients" class="btn btn-outline-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>

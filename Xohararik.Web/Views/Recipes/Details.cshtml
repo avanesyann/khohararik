@@ -1,0 +1,106 @@
+@model RecipeDetailViewModel
+@{
+    ViewData["Title"] = Model.Name;
+}
+
+<div class="row">
+    <div class="col-lg-5 mb-4">
+        <div class="bg-light rounded d-flex align-items-center justify-content-center" style="min-height:300px;">
+            @if (!string.IsNullOrEmpty(Model.ImageUrl))
+            {
+                <img src="@Model.ImageUrl" alt="@Model.Name" class="img-fluid rounded" style="max-height:350px;" />
+            }
+            else
+            {
+                <i class="bi bi-book display-1 text-muted"></i>
+            }
+        </div>
+    </div>
+    <div class="col-lg-7">
+        <div class="d-flex align-items-center gap-3 mb-3">
+            <h2 class="fw-bold mb-0">@Model.Name</h2>
+            <span class="badge fs-6 @(Model.IsFullMatch ? "bg-success" : "bg-warning text-dark")">
+                @Model.MatchPercent% match
+            </span>
+        </div>
+
+        @if (!string.IsNullOrEmpty(Model.Description))
+        {
+            <p class="text-muted lead">@Model.Description</p>
+        }
+
+        <div class="row g-2 mb-3">
+            <div class="col-auto">
+                <span class="badge bg-light text-dark border">
+                    <i class="bi bi-lightning me-1 text-warning"></i>@Model.TotalCalories kcal
+                </span>
+            </div>
+            <div class="col-auto">
+                <span class="badge bg-light text-dark border">
+                    <i class="bi bi-list-check me-1 text-success"></i>@Model.Ingredients.Count ingredients
+                </span>
+            </div>
+        </div>
+
+        <!-- Match Progress -->
+        <div class="mb-3">
+            <div class="d-flex justify-content-between small text-muted mb-1">
+                <span>Ingredient match</span>
+                <span>@Model.Ingredients.Count(i => i.IsInCart) / @Model.Ingredients.Count</span>
+            </div>
+            <div class="progress" style="height:10px;">
+                <div class="progress-bar @(Model.IsFullMatch ? "bg-success" : "bg-warning")"
+                     style="width:@Model.MatchPercent%"></div>
+            </div>
+        </div>
+
+        <!-- Ingredients -->
+        <h5 class="fw-bold mt-4">Ingredients</h5>
+        <ul class="list-group list-group-flush mb-4">
+            @foreach (var ingredient in Model.Ingredients)
+            {
+                <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                    <span class="@(ingredient.IsInCart ? "" : "text-danger")">
+                        <i class="bi @(ingredient.IsInCart ? "bi-check-circle-fill text-success" : "bi-x-circle-fill text-danger") me-2"></i>
+                        @ingredient.Name
+                    </span>
+                    <span class="badge bg-light text-dark border">@ingredient.RequiredWeight g</span>
+                </li>
+            }
+        </ul>
+
+        @if (Model.MissingIngredients.Any())
+        {
+            <div class="alert alert-warning">
+                <i class="bi bi-cart-plus me-2"></i>
+                <strong>Missing:</strong> @string.Join(", ", Model.MissingIngredients)
+                <a asp-controller="Ingredients" asp-action="Index" class="btn btn-sm btn-warning ms-2">
+                    Add to Cart
+                </a>
+            </div>
+        }
+    </div>
+</div>
+
+@if (!string.IsNullOrEmpty(Model.Instructions))
+{
+    <div class="mt-4">
+        <h5 class="fw-bold"><i class="bi bi-journal-text me-2 text-warning"></i>Instructions</h5>
+        <div class="card border-0 bg-light p-4">
+            @foreach (var step in Model.Instructions.Split('\n', StringSplitOptions.RemoveEmptyEntries).Select((s, i) => new { Step = s.Trim(), Index = i + 1 }))
+            {
+                <div class="d-flex gap-3 mb-3">
+                    <span class="badge bg-warning text-dark rounded-circle d-flex align-items-center justify-content-center"
+                          style="width:28px;height:28px;min-width:28px;">@step.Index</span>
+                    <span>@step.Step.TrimStart('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.',' ')</span>
+                </div>
+            }
+        </div>
+    </div>
+}
+
+<div class="mt-4">
+    <a asp-controller="Recipes" asp-action="Recommendations" class="btn btn-outline-dark">
+        <i class="bi bi-arrow-left me-2"></i>Back to Recommendations
+    </a>
+</div>

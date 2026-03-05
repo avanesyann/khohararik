@@ -1,0 +1,76 @@
+@model RecommendationsPageViewModel
+@{
+    ViewData["Title"] = "Recipe Recommendations";
+}
+
+<div class="mb-4">
+    <h2 class="fw-bold"><i class="bi bi-search-heart me-2 text-warning"></i>Recipe Recommendations</h2>
+    <p class="text-muted">Based on your selected ingredients:
+        @foreach (var name in Model.CartIngredientNames)
+        {
+            <span class="badge bg-secondary me-1">@name</span>
+        }
+    </p>
+</div>
+
+@if (!Model.Results.Any())
+{
+    <div class="alert alert-warning text-center py-5">
+        <i class="bi bi-emoji-frown display-3 d-block mb-3"></i>
+        <h5>No matching recipes found.</h5>
+        <p>Try adding more ingredients to your cart.</p>
+        <a asp-controller="Ingredients" asp-action="Index" class="btn btn-warning">
+            <i class="bi bi-grid me-2"></i>Browse Ingredients
+        </a>
+    </div>
+}
+else
+{
+    <!-- Stats Bar -->
+    <div class="row g-3 mb-4">
+        <div class="col-auto">
+            <div class="card bg-success text-white px-4 py-3 text-center">
+                <div class="fs-3 fw-bold">@Model.FullMatchCount</div>
+                <small>Full Match</small>
+            </div>
+        </div>
+        <div class="col-auto">
+            <div class="card bg-warning px-4 py-3 text-center">
+                <div class="fs-3 fw-bold">@Model.PartialMatchCount</div>
+                <small>Partial Match</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Full Matches -->
+    @if (Model.FullMatchCount > 0)
+    {
+        <h5 class="fw-bold text-success mb-3">
+            <i class="bi bi-check-circle-fill me-2"></i>Perfect Matches
+        </h5>
+        <div class="row g-3 mb-4">
+            @foreach (var r in Model.Results.Where(r => r.IsFullMatch))
+            {
+                <div class="col-md-6 col-lg-4">
+                    @await Html.PartialAsync("_RecipeCard", r)
+                </div>
+            }
+        </div>
+    }
+
+    <!-- Partial Matches -->
+    @if (Model.PartialMatchCount > 0)
+    {
+        <h5 class="fw-bold text-warning mb-3">
+            <i class="bi bi-percent me-2"></i>Partial Matches
+        </h5>
+        <div class="row g-3">
+            @foreach (var r in Model.Results.Where(r => !r.IsFullMatch))
+            {
+                <div class="col-md-6 col-lg-4">
+                    @await Html.PartialAsync("_RecipeCard", r)
+                </div>
+            }
+        </div>
+    }
+}

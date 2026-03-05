@@ -1,0 +1,43 @@
+@model RecipeRecommendationResult
+
+<div class="card h-100 shadow-sm recipe-card">
+    <div class="position-relative">
+        <div class="bg-light d-flex align-items-center justify-content-center" style="height:160px;">
+            @if (!string.IsNullOrEmpty(Model.ImageUrl))
+            {
+                <img src="@Model.ImageUrl" alt="@Model.Name"
+                     style="max-height:150px; max-width:100%; object-fit:cover; width:100%;" />
+            }
+            else
+            {
+                <i class="bi bi-book display-3 text-muted"></i>
+            }
+        </div>
+        <span class="position-absolute top-0 end-0 m-2 badge @(Model.IsFullMatch ? "bg-success" : "bg-warning text-dark") fs-6">
+            @Model.MatchPercent%
+        </span>
+    </div>
+    <div class="card-body d-flex flex-column">
+        <h6 class="card-title fw-bold">@Model.Name</h6>
+        <p class="card-text text-muted small flex-grow-1">@Model.Description</p>
+        <div class="mb-2">
+            <div class="progress" style="height:6px;">
+                <div class="progress-bar @(Model.IsFullMatch ? "bg-success" : "bg-warning")"
+                     style="width:@Model.MatchPercent%"></div>
+            </div>
+        </div>
+        <small class="text-muted mb-2">
+            <i class="bi bi-lightning me-1"></i>@Model.TotalCalories kcal
+        </small>
+        @if (Model.MissingIngredients.Any())
+        {
+            <small class="text-danger mb-2">
+                <i class="bi bi-x-circle me-1"></i>Missing: @string.Join(", ", Model.MissingIngredients)
+            </small>
+        }
+        <a asp-controller="Recipes" asp-action="Details" asp-route-id="@Model.RecipeId"
+           class="btn btn-sm @(Model.IsFullMatch ? "btn-success" : "btn-warning") mt-auto">
+            <i class="bi bi-eye me-1"></i>View Recipe
+        </a>
+    </div>
+</div>

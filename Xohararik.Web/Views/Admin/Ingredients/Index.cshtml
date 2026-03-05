@@ -1,0 +1,68 @@
+@model List<Xohararik.Web.Models.Ingredient>
+@{
+    ViewData["Title"] = "Admin — Ingredients";
+    Layout = "_Layout";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold"><i class="bi bi-shield-lock me-2 text-warning"></i>Admin — Ingredients</h2>
+    <a href="/Admin/Ingredients/Create" class="btn btn-success">
+        <i class="bi bi-plus-circle me-1"></i>Add Ingredient
+    </a>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">No ingredients yet.</div>
+}
+else
+{
+    <div class="card shadow-sm">
+        <div class="card-body p-0">
+            <table class="table table-hover mb-0 align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Image</th>
+                        <th>Name</th>
+                        <th>Category</th>
+                        <th>Calories/100g</th>
+                        <th>Default Weight</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var ingredient in Model)
+                    {
+                        <tr>
+                            <td>
+                                @if (!string.IsNullOrEmpty(ingredient.ImageUrl))
+                                {
+                                    <img src="@ingredient.ImageUrl" style="width:40px;height:40px;object-fit:contain;" />
+                                }
+                                else
+                                {
+                                    <i class="bi bi-egg-fried text-muted"></i>
+                                }
+                            </td>
+                            <td class="fw-semibold">@ingredient.Name</td>
+                            <td><span class="badge bg-secondary">@ingredient.Category?.Name</span></td>
+                            <td>@ingredient.CaloriesPer100g</td>
+                            <td>@ingredient.DefaultWeight g</td>
+                            <td>
+                                <a href="/Admin/Ingredients/Edit/@ingredient.Id" class="btn btn-sm btn-outline-primary me-1">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                <form action="/Admin/Ingredients/Delete/@ingredient.Id" method="post" class="d-inline"
+                                      onsubmit="return confirm('Delete @ingredient.Name?')">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}

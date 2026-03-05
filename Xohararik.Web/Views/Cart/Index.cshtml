@@ -1,0 +1,121 @@
+@model CartViewModel
+@{
+    ViewData["Title"] = "Your Cart";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold mb-0"><i class="bi bi-basket2 me-2 text-warning"></i>Your Ingredient Cart</h2>
+    @if (Model.Items.Any())
+    {
+        <form asp-controller="Cart" asp-action="Clear" method="post">
+            <button type="submit" class="btn btn-outline-danger btn-sm">
+                <i class="bi bi-trash me-1"></i>Clear Cart
+            </button>
+        </form>
+    }
+</div>
+
+@if (!Model.Items.Any())
+{
+    <div class="text-center py-5">
+        <i class="bi bi-basket2 display-1 text-muted mb-3"></i>
+        <h5 class="text-muted">Your cart is empty</h5>
+        <a asp-controller="Ingredients" asp-action="Index" class="btn btn-warning mt-3">
+            <i class="bi bi-grid me-2"></i>Browse Ingredients
+        </a>
+    </div>
+}
+else
+{
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card shadow-sm">
+                <div class="card-body p-0">
+                    <table class="table table-hover mb-0 align-middle">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Ingredient</th>
+                                <th class="text-center">Quantity</th>
+                                <th class="text-center">Calories</th>
+                                <th class="text-center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.Items)
+                            {
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center gap-3">
+                                            @if (!string.IsNullOrEmpty(item.ImageUrl))
+                                            {
+                                                <img src="@item.ImageUrl" alt="@item.Name"
+                                                     style="width:40px;height:40px;object-fit:contain;" />
+                                            }
+                                            else
+                                            {
+                                                <i class="bi bi-egg-fried fs-4 text-muted"></i>
+                                            }
+                                            <span class="fw-semibold">@item.Name</span>
+                                        </div>
+                                    </td>
+                                    <td class="text-center">
+                                        <form asp-controller="Cart" asp-action="UpdateQuantity" method="post"
+                                              class="d-flex align-items-center justify-content-center gap-2">
+                                            <input type="hidden" name="ingredientId" value="@item.IngredientId" />
+                                            <button type="submit" name="quantity" value="@(item.Quantity - 1)"
+                                                    class="btn btn-outline-secondary btn-sm">
+                                                <i class="bi bi-dash"></i>
+                                            </button>
+                                            <span class="fw-bold px-2">@item.Quantity</span>
+                                            <button type="submit" name="quantity" value="@(item.Quantity + 1)"
+                                                    class="btn btn-outline-secondary btn-sm">
+                                                <i class="bi bi-plus"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                    <td class="text-center text-muted small">
+                                        @((item.CaloriesPer100g * item.DefaultWeight * item.Quantity / 100.0).ToString("F0")) kcal
+                                    </td>
+                                    <td class="text-center">
+                                        <form asp-controller="Cart" asp-action="Remove" method="post">
+                                            <input type="hidden" name="ingredientId" value="@item.IngredientId" />
+                                            <button type="submit" class="btn btn-outline-danger btn-sm">
+                                                <i class="bi bi-x-lg"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 mt-4 mt-lg-0">
+            <div class="card shadow-sm border-warning">
+                <div class="card-header bg-warning fw-bold">
+                    <i class="bi bi-receipt me-2"></i>Cart Summary
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Total Ingredients:</span>
+                        <strong>@Model.TotalItems</strong>
+                    </div>
+                    <div class="d-flex justify-content-between mb-3">
+                        <span>Est. Total Calories:</span>
+                        <strong>@Model.TotalCalories.ToString("F0") kcal</strong>
+                    </div>
+                    <a asp-controller="Recipes" asp-action="Recommendations"
+                       class="btn btn-warning w-100 fw-bold">
+                        <i class="bi bi-search-heart me-2"></i>Find Recipes
+                    </a>
+                    <a asp-controller="Ingredients" asp-action="Index"
+                       class="btn btn-outline-dark w-100 mt-2">
+                        <i class="bi bi-plus-circle me-2"></i>Add More Ingredients
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+}
