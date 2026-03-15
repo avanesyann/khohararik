@@ -1,0 +1,91 @@
+@model Khohararik.ViewModels.RecommendationsViewModel
+@{
+    ViewData["Title"] = "Recipe Recommendations";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold mb-0"><i class="bi bi-stars me-2 text-warning"></i>@L["Rec_Title"]</h2>
+    <a asp-controller="Cart" asp-action="Index" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left me-1"></i>@L["Rec_BackToCart"] (@Model.Cart.TotalItems @L["Ing_Items"])
+    </a>
+</div>
+
+<!-- Search Bar -->
+<form method="get" asp-action="Recommendations" class="card border-0 shadow-sm p-3 mb-4">
+    <div class="row g-2 align-items-end">
+        <div class="col-md-8">
+            <label class="form-label fw-semibold">@L["Rec_SearchLabel"]</label>
+            <input type="text" name="search" value="@Model.Search" class="form-control"
+                   placeholder="@L["Rec_SearchPlaceholder"]" />
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-success w-100">@L["Rec_Search"]</button>
+        </div>
+        @if (!string.IsNullOrEmpty(Model.Search))
+        {
+            <div class="col-md-2">
+                <a asp-action="Recommendations" class="btn btn-outline-secondary w-100">@L["Rec_Clear"]</a>
+            </div>
+        }
+    </div>
+</form>
+
+@if (!Model.Cart.Items.Any())
+{
+    <div class="card border-0 shadow-sm p-5 text-center">
+        <div class="display-1 mb-3">🛒</div>
+        <h4>@L["Rec_EmptyCart"]</h4>
+        <p class="text-muted">@L["Rec_EmptyCartDesc"]</p>
+        <a asp-controller="Ingredients" asp-action="Index" class="btn btn-success">@L["Cart_BrowseIngredients"]</a>
+    </div>
+}
+else if (!Model.FullMatches.Any() && !Model.PartialMatches.Any())
+{
+    <div class="alert alert-warning">
+        <i class="bi bi-exclamation-triangle me-2"></i>
+        @L["Rec_NoMatch"]
+    </div>
+}
+else
+{
+    <!-- Cart ingredients used -->
+    <div class="mb-3">
+        <small class="text-muted">
+            <i class="bi bi-info-circle me-1"></i>
+            @L["Rec_MatchingAgainst"] <strong>@Model.Cart.Items.Count</strong> @L["Rec_Ingredients"]
+            @string.Join(", ", Model.Cart.Items.Select(i => i.Name))
+        </small>
+    </div>
+
+    <!-- Full matches -->
+    @if (Model.FullMatches.Any())
+    {
+        <h4 class="fw-bold text-success mb-3">
+            <i class="bi bi-check-circle-fill me-2"></i>@L["Rec_PerfectMatches"] (@Model.FullMatches.Count)
+        </h4>
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-5">
+            @foreach (var rec in Model.FullMatches)
+            {
+                <div class="col">
+                    @await Html.PartialAsync("_RecipeCard", rec)
+                </div>
+            }
+        </div>
+    }
+
+    <!-- Partial matches -->
+    @if (Model.PartialMatches.Any())
+    {
+        <h4 class="fw-bold text-warning mb-3">
+            <i class="bi bi-pie-chart me-2"></i>@L["Rec_PartialMatches"] (@Model.PartialMatches.Count)
+        </h4>
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            @foreach (var rec in Model.PartialMatches)
+            {
+                <div class="col">
+                    @await Html.PartialAsync("_RecipeCard", rec)
+                </div>
+            }
+        </div>
+    }
+}

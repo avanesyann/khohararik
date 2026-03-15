@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter</value></resheader>
+
+  <!-- Nav -->
+  <data name="Nav_Ingredients" xml:space="preserve"><value>Բաղադրիչներ</value></data>
+  <data name="Nav_Recipes" xml:space="preserve"><value>Բաղադրատոմսեր</value></data>
+  <data name="Nav_GetRecommendations" xml:space="preserve"><value>Ստանալ Առաջարկություններ</value></data>
+  <data name="Nav_Admin" xml:space="preserve"><value>Ադմին</value></data>
+  <data name="Nav_Login" xml:space="preserve"><value>Մուտք</value></data>
+  <data name="Nav_Register" xml:space="preserve"><value>Գրանցվել</value></data>
+  <data name="Nav_Logout" xml:space="preserve"><value>Ելք</value></data>
+  <data name="Nav_Hello" xml:space="preserve"><value>Բարև, {0}!</value></data>
+
+  <!-- Home -->
+  <data name="Home_Hero_Sub" xml:space="preserve"><value>Ընտրեք ձեր բաղադրիչները և հայտնաբերեք հիմա պատրաստել կարողացած բաղադրատոմսերը!</value></data>
+  <data name="Home_Browse" xml:space="preserve"><value>Դիտել Բաղադրիչները</value></data>
+  <data name="Home_HowItWorks" xml:space="preserve"><value>Ինչպես է Աշխատում</value></data>
+  <data name="Home_Step1_Title" xml:space="preserve"><value>1. Ընտրել Բաղադրիչներ</value></data>
+  <data name="Home_Step1_Desc" xml:space="preserve"><value>Թերթեք մեր բաղադրիչների կատալոգը ըստ կատեգորիայի և ավելացրեք ունեցածները ձեր զամբյուղ:</value></data>
+  <data name="Home_Step2_Title" xml:space="preserve"><value>2. Ստանալ Համընկնումներ</value></data>
+  <data name="Home_Step2_Desc" xml:space="preserve"><value>Մեր ալգորիթմը գտնում է բաղադրատոմսեր, որոնք ամբողջությամբ կամ մասամբ համընկնում են ձեր բաղադրիչների հետ:</value></data>
+  <data name="Home_Step3_Title" xml:space="preserve"><value>3. Սկսել Պատրաստել</value></data>
+  <data name="Home_Step3_Desc" xml:space="preserve"><value>Հետևեք քայլ առ քայլ հրահանգներին ձեր ընտրած բաղադրատոմսի համար և վայելեք ձեր ճաշը!</value></data>
+
+  <!-- Ingredients page -->
+  <data name="Ing_Filter" xml:space="preserve"><value>Զտիչ</value></data>
+  <data name="Ing_Search" xml:space="preserve"><value>Փնտրել բաղադրիչներ...</value></data>
+  <data name="Ing_AllCategories" xml:space="preserve"><value>Բոլոր Կատեգորիաները</value></data>
+  <data name="Ing_ViewCart" xml:space="preserve"><value>Դիտել Զամբյուղը</value></data>
+  <data name="Ing_AddToCart" xml:space="preserve"><value>Ավելացնել Զամբյուղ</value></data>
+  <data name="Ing_AllIngredients" xml:space="preserve"><value>Բոլոր Բաղադրիչները</value></data>
+  <data name="Ing_Items" xml:space="preserve"><value>ապրանք</value></data>
+  <data name="Ing_NoResults" xml:space="preserve"><value>Ձեր որոնմանը համապատասխան բաղադրիչ չի գտնվել:</value></data>
+  <data name="Ing_NoFound" xml:space="preserve"><value>Բաղադրիչ չի գտնվել: Փորձեք մեկ այլ կատեգորիա:</value></data>
+
+  <!-- Cart page -->
+  <data name="Cart_Title" xml:space="preserve"><value>Իմ Զամբյուղը</value></data>
+  <data name="Cart_Empty" xml:space="preserve"><value>Ձեր զամբյուղը դատարկ է</value></data>
+  <data name="Cart_EmptyDesc" xml:space="preserve"><value>Թերթեք բաղադրիչները և ավելացրեք դրանք ձեր զամբյուղ:</value></data>
+  <data name="Cart_BrowseIngredients" xml:space="preserve"><value>Դիտել Բաղադրիչները</value></data>
+  <data name="Cart_Ingredient" xml:space="preserve"><value>Բաղադրիչ</value></data>
+  <data name="Cart_Category" xml:space="preserve"><value>Կատեգորիա</value></data>
+  <data name="Cart_CalPer100" xml:space="preserve"><value>Կալ/100գ</value></data>
+  <data name="Cart_Qty" xml:space="preserve"><value>Քանակ</value></data>
+  <data name="Cart_TotalKcal" xml:space="preserve"><value>Ընդ. կկալ</value></data>
+  <data name="Cart_Clear" xml:space="preserve"><value>Մաքրել Զամբյուղը</value></data>
+  <data name="Cart_ClearConfirm" xml:space="preserve"><value>Ամբողջությամբ մաքրե՞լ զամբյուղը:</value></data>
+  <data name="Cart_ContinueShopping" xml:space="preserve"><value>Շարունակել Ընտրությունը</value></data>
+  <data name="Cart_Summary" xml:space="preserve"><value>Ամփոփում</value></data>
+  <data name="Cart_TotalIngredients" xml:space="preserve"><value>Ընդամենը բաղադրիչ՝</value></data>
+  <data name="Cart_TotalCalories" xml:space="preserve"><value>Ընդամենը կալորիա՝</value></data>
+  <data name="Cart_GetRecommendations" xml:space="preserve"><value>Ստանալ Առաջարկություններ</value></data>
+
+  <!-- Recommendations page -->
+  <data name="Rec_Title" xml:space="preserve"><value>Բաղադրատոմսի Առաջարկություններ</value></data>
+  <data name="Rec_BackToCart" xml:space="preserve"><value>Վերադառնալ Զամբյուղ</value></data>
+  <data name="Rec_SearchLabel" xml:space="preserve"><value>Փնտրել Բաղադրատոմս Անունով</value></data>
+  <data name="Rec_SearchPlaceholder" xml:space="preserve"><value>օր. Հավ, Մակարոն...</value></data>
+  <data name="Rec_Search" xml:space="preserve"><value>Փնտրել</value></data>
+  <data name="Rec_Clear" xml:space="preserve"><value>Մաքրել</value></data>
+  <data name="Rec_EmptyCart" xml:space="preserve"><value>Ձեր զամբյուղը դատարկ է</value></data>
+  <data name="Rec_EmptyCartDesc" xml:space="preserve"><value>Նախ ավելացրեք բաղադրիչներ ձեր զամբյուղ՝ առաջարկություններ ստանալու համար:</value></data>
+  <data name="Rec_NoMatch" xml:space="preserve"><value>Ձեր բաղադրիչներին համապատասխան բաղադրատոմս չի գտնվել: Ավելացրեք ավելի շատ բաղադրիչ:</value></data>
+  <data name="Rec_MatchingAgainst" xml:space="preserve"><value>Համեմատվում է</value></data>
+  <data name="Rec_Ingredients" xml:space="preserve"><value>բաղադրիչ(ների) հետ՝</value></data>
+  <data name="Rec_PerfectMatches" xml:space="preserve"><value>Ամբողջական Համընկնումներ</value></data>
+  <data name="Rec_PartialMatches" xml:space="preserve"><value>Մասնակի Համընկնումներ</value></data>
+  <data name="Rec_PerfectMatch" xml:space="preserve"><value>Ամբողջական Համընկնում</value></data>
+  <data name="Rec_Matched" xml:space="preserve"><value>բաղադրիչ համընկնել է</value></data>
+  <data name="Rec_Missing" xml:space="preserve"><value>Բացակայում է՝</value></data>
+  <data name="Rec_More" xml:space="preserve"><value>ևս</value></data>
+  <data name="Rec_ViewRecipe" xml:space="preserve"><value>Դիտել Բաղադրատոմսը</value></data>
+
+  <!-- Recipe Details -->
+  <data name="Det_Prep" xml:space="preserve"><value>Նախապատ.</value></data>
+  <data name="Det_Cook" xml:space="preserve"><value>Եփում</value></data>
+  <data name="Det_Servings" xml:space="preserve"><value>Չափաբաժին</value></data>
+  <data name="Det_TotalCalories" xml:space="preserve"><value>Ընդ. կալորիա</value></data>
+  <data name="Det_Ingredients" xml:space="preserve"><value>Բաղադրիչներ</value></data>
+  <data name="Det_Instructions" xml:space="preserve"><value>Պատրաստման Եղանակ</value></data>
+  <data name="Det_Missing" xml:space="preserve"><value>Դեռ բացակայում են՝</value></data>
+  <data name="Det_HaveAll" xml:space="preserve"><value>Դուք ունեք այս բաղադրատոմսի բոլոր բաղադրիչները!</value></data>
+  <data name="Det_BackToRec" xml:space="preserve"><value>Վերադառնալ Առաջարկություններ</value></data>
+  <data name="Det_AddMore" xml:space="preserve"><value>Ավելացնել Բաղադրիչներ</value></data>
+
+  <!-- Recipes list page -->
+  <data name="RecList_Title" xml:space="preserve"><value>Բոլոր Բաղադրատոմսերը</value></data>
+  <data name="RecList_Search" xml:space="preserve"><value>Փնտրել բաղադրատոմս անունով...</value></data>
+  <data name="RecList_NoMatch" xml:space="preserve"><value>Ձեր որոնմանը համապատասխան բաղադրատոմս չի գտնվել:</value></data>
+  <data name="RecList_ViewRecipe" xml:space="preserve"><value>Դիտել Բաղադրատոմսը</value></data>
+  <data name="RecList_Recipes" xml:space="preserve"><value>բաղադրատոմս</value></data>
+
+  <!-- Auth -->
+  <data name="Auth_WelcomeBack" xml:space="preserve"><value>Բարի Վերադարձ</value></data>
+  <data name="Auth_SignIn" xml:space="preserve"><value>Մուտք գործեք ձեր Խոհարարիկ հաշվեհամար</value></data>
+  <data name="Auth_Email" xml:space="preserve"><value>Էլ. հասցե</value></data>
+  <data name="Auth_Password" xml:space="preserve"><value>Գաղտնաբառ</value></data>
+  <data name="Auth_RememberMe" xml:space="preserve"><value>Հիշել ինձ</value></data>
+  <data name="Auth_LogIn" xml:space="preserve"><value>Մուտք</value></data>
+  <data name="Auth_CreateAccount" xml:space="preserve"><value>Ստեղծել նոր հաշիվ</value></data>
+  <data name="Auth_ForgotPassword" xml:space="preserve"><value>Մոռացե՞լ եք գաղտնաբառը:</value></data>
+  <data name="Auth_CreateTitle" xml:space="preserve"><value>Ստեղծել Հաշիվ</value></data>
+  <data name="Auth_CreateSub" xml:space="preserve"><value>Միացեք Խոհարարիկին՝ ձեր սիրած բաղադրատոմսերը պահելու համար</value></data>
+  <data name="Auth_ConfirmPassword" xml:space="preserve"><value>Հաստատել Գաղտնաբառը</value></data>
+  <data name="Auth_AlreadyHave" xml:space="preserve"><value>Արդեն ունե՞ք հաշիվ:</value></data>
+
+  <!-- Footer -->
+  <data name="Footer_Copy" xml:space="preserve"><value>© 2026 Խոհարարիկ — Բաղադրատոմսերի Առաջարկման Համակարգ</value></data>
+</root>

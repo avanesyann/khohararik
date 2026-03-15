@@ -1,0 +1,29 @@
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Create Category";
+}
+@model Khohararik.Models.Category
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card border-0 shadow-sm p-4">
+            <h4 class="fw-bold mb-4">New Category</h4>
+            <form asp-action="Create" method="post">
+                @Html.AntiForgeryToken()
+                <div class="mb-3">
+                    <label asp-for="Name" class="form-label fw-semibold"></label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="IconClass" class="form-label fw-semibold">Icon Class <small class="text-muted">(e.g. bi bi-egg-fried)</small></label>
+                    <input asp-for="IconClass" class="form-control" />
+                </div>
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-success">Save</button>
+                    <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

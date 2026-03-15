@@ -1,0 +1,227 @@
+@model Khohararik.ViewModels.IngredientsIndexViewModel
+@{
+    ViewData["Title"] = "Ingredients";
+}
+
+<div class="row g-4">
+    <!-- Sidebar: Categories -->
+    <div class="col-lg-3">
+        <div class="card border-0 shadow-sm p-3 sticky-top" style="top: 80px; max-height: calc(100vh - 100px); overflow-y: auto;">
+            <h6 class="fw-bold text-uppercase text-muted mb-3"><i class="bi bi-funnel me-1"></i>@L["Ing_Filter"]</h6>
+
+            <form method="get" asp-action="Index" id="filterForm">
+                <div class="mb-3 position-relative">
+                    <input type="text" id="searchInput" class="form-control pe-4"
+                           placeholder="@L["Ing_Search"]" autocomplete="off" />
+                    <button type="button" id="clearSearch"
+                            class="position-absolute top-50 end-0 translate-middle-y me-2 border-0 bg-transparent text-muted"
+                            style="display:none; z-index:5;" title="Clear">
+                        <i class="bi bi-x-circle-fill"></i>
+                    </button>
+                </div>
+
+                <div class="d-flex flex-column gap-1">
+                    <a asp-action="Index"
+                       class="btn btn-sm @(Model.SelectedCategoryId == null ? "btn-success" : "btn-outline-secondary") category-pill text-start">
+                        @L["Ing_AllCategories"]
+                    </a>
+                    @foreach (var cat in Model.Categories)
+                    {
+                        <a asp-action="Index" asp-route-categoryId="@cat.Id"
+                           class="btn btn-sm @(Model.SelectedCategoryId == cat.Id ? "btn-success" : "btn-outline-secondary") category-pill text-start">
+                            @if (!string.IsNullOrEmpty(cat.IconClass))
+                            {
+                                <i class="@cat.IconClass me-1"></i>
+                            }
+                            @cat.Name
+                        </a>
+                    }
+                </div>
+            </form>
+
+            <hr />
+            <a asp-controller="Cart" asp-action="Index" class="btn btn-warning w-100 fw-semibold">
+                <i class="bi bi-cart3 me-1"></i> @L["Ing_ViewCart"] (<span id="sidebar-count">0</span>)
+            </a>
+            <a asp-controller="Recipes" asp-action="Recommendations" class="btn btn-success w-100 mt-2 fw-semibold">
+                <i class="bi bi-stars me-1"></i> @L["Nav_GetRecommendations"]
+            </a>
+        </div>
+    </div>
+
+    <!-- Ingredient Grid -->
+    <div class="col-lg-9">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h4 class="fw-bold mb-0" id="grid-title">
+                @if (Model.SelectedCategoryId.HasValue)
+                {
+                    @Model.Categories.FirstOrDefault(c => c.Id == Model.SelectedCategoryId)?.Name
+                }
+                else
+                {
+                    <span>@L["Ing_AllIngredients"]</span>
+                }
+            </h4>
+            <span class="text-muted" id="ing-count">@Model.Ingredients.Count @L["Ing_Items"]</span>
+        </div>
+
+        @if (!Model.Ingredients.Any())
+        {
+            <div class="alert alert-info">@L["Ing_NoFound"]</div>
+        }
+        else
+        {
+            <div class="row row-cols-2 row-cols-md-3 row-cols-xl-4 g-3" id="ing-grid">
+                @foreach (var ing in Model.Ingredients)
+                {
+                    var inCart = Model.Cart.Items.FirstOrDefault(i => i.IngredientId == ing.Id);
+                    <div class="col ing-item" data-name="@ing.Name.ToLower()">
+                        <div class="card ingredient-card shadow-sm h-100">
+                            @if (!string.IsNullOrEmpty(ing.ImageUrl))
+                            {
+                                <img src="@ing.ImageUrl" alt="@ing.Name" class="card-img-top"
+                                     style="height:160px; object-fit:contain; background:#fff; padding:8px;" />
+                            }
+                            else
+                            {
+                                <div class="d-flex align-items-center justify-content-center bg-light" style="height:160px;font-size:3rem;">🥗</div>
+                            }
+                            <div class="card-body p-2 d-flex flex-column">
+                                <h6 class="card-title fw-bold mb-1" style="font-size:.9rem;">@ing.Name</h6>
+                                <small class="text-muted mb-1">
+                                    <i class="bi bi-fire"></i> @ing.CaloriesPer100g kcal/100g
+                                </small>
+                                <small class="text-muted mb-2">
+                                    <i class="bi bi-tag"></i> @ing.Category.Name
+                                </small>
+
+                                @if (inCart != null)
+                                {
+                                    <div class="d-flex align-items-center gap-1 mt-auto">
+                                        <button class="btn btn-sm btn-outline-danger qty-btn"
+                                                data-id="@ing.Id" data-action="decrease">−</button>
+                                        <span class="flex-grow-1 text-center fw-bold qty-display" data-id="@ing.Id">@inCart.Quantity</span>
+                                        <button class="btn btn-sm btn-outline-success qty-btn"
+                                                data-id="@ing.Id" data-action="increase">+</button>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <button class="btn btn-sm btn-success mt-auto add-to-cart-btn" data-id="@ing.Id">
+                                        <i class="bi bi-plus-circle me-1"></i>@L["Ing_AddToCart"]
+                                    </button>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div id="ing-no-results" class="alert alert-info d-none">@L["Ing_NoResults"]</div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    // Live client-side ingredient search
+    (function() {
+        const searchInput = document.getElementById('searchInput');
+        const clearBtn = document.getElementById('clearSearch');
+        const items = document.querySelectorAll('.ing-item');
+        const countEl = document.getElementById('ing-count');
+        const noResults = document.getElementById('ing-no-results');
+
+        function filterIngredients() {
+            const q = searchInput.value.toLowerCase().trim();
+            clearBtn.style.display = q ? 'inline-block' : 'none';
+            let visible = 0;
+            items.forEach(item => {
+                const match = !q || item.dataset.name.includes(q);
+                item.style.display = match ? '' : 'none';
+                if (match) visible++;
+            });
+            if (countEl) countEl.textContent = visible + ' items';
+            if (noResults) noResults.classList.toggle('d-none', visible > 0);
+        }
+
+        searchInput.addEventListener('input', filterIngredients);
+        searchInput.addEventListener('keydown', e => { if (e.key === 'Enter') e.preventDefault(); });
+        clearBtn.addEventListener('click', () => { searchInput.value = ''; filterIngredients(); searchInput.focus(); });
+    })();
+
+    // Update cart badge
+    function refreshCounts() {
+        fetch('/Cart/Count').then(r => r.json()).then(d => {
+            document.getElementById('cart-count').textContent = d.count;
+            document.getElementById('sidebar-count').textContent = d.count;
+        });
+    }
+
+    // Add to cart
+    document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const id = this.dataset.id;
+            fetch('/Ingredients/AddToCart/' + id, {
+                method: 'POST',
+                headers: { 'X-Requested-With': 'XMLHttpRequest', 'RequestVerificationToken': getToken() }
+            })
+            .then(r => r.json())
+            .then(d => {
+                if (d.success) {
+                    refreshCounts();
+                    // Replace button with qty controls
+                    const card = this.closest('.card-body');
+                    this.outerHTML = `
+                        <div class="d-flex align-items-center gap-1 mt-auto">
+                            <button class="btn btn-sm btn-outline-danger qty-btn" data-id="${id}" data-action="decrease">−</button>
+                            <span class="flex-grow-1 text-center fw-bold qty-display" data-id="${id}">1</span>
+                            <button class="btn btn-sm btn-outline-success qty-btn" data-id="${id}" data-action="increase">+</button>
+                        </div>`;
+                    // Re-attach events
+                    attachQtyListeners();
+                }
+            });
+        });
+    });
+
+    function attachQtyListeners() {
+        document.querySelectorAll('.qty-btn').forEach(btn => {
+            btn.onclick = function() {
+                const id = this.dataset.id;
+                const action = this.dataset.action;
+                const display = document.querySelector(`.qty-display[data-id="${id}"]`);
+                let qty = parseInt(display.textContent);
+                qty = action === 'increase' ? qty + 1 : qty - 1;
+
+                fetch('/Cart/UpdateQuantity', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'RequestVerificationToken': getToken()
+                    },
+                    body: `id=${id}&quantity=${qty}`
+                })
+                .then(r => r.json())
+                .then(d => {
+                    if (d.success) {
+                        display.textContent = qty > 0 ? qty : 0;
+                        refreshCounts();
+                        if (qty <= 0) location.reload();
+                    }
+                });
+            };
+        });
+    }
+    attachQtyListeners();
+
+    function getToken() {
+        const el = document.querySelector('input[name="__RequestVerificationToken"]');
+        return el ? el.value : '';
+    }
+    refreshCounts();
+</script>
+<form id="antiforgery-form">
+    @Html.AntiForgeryToken()
+</form>
+}

@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter</value></resheader>
+
+  <!-- Nav -->
+  <data name="Nav_Ingredients" xml:space="preserve"><value>Ingredients</value></data>
+  <data name="Nav_Recipes" xml:space="preserve"><value>Recipes</value></data>
+  <data name="Nav_GetRecommendations" xml:space="preserve"><value>Get Recommendations</value></data>
+  <data name="Nav_Admin" xml:space="preserve"><value>Admin</value></data>
+  <data name="Nav_Login" xml:space="preserve"><value>Login</value></data>
+  <data name="Nav_Register" xml:space="preserve"><value>Register</value></data>
+  <data name="Nav_Logout" xml:space="preserve"><value>Logout</value></data>
+  <data name="Nav_Hello" xml:space="preserve"><value>Hello {0}!</value></data>
+
+  <!-- Home -->
+  <data name="Home_Hero_Sub" xml:space="preserve"><value>Select your ingredients and discover recipes you can make right now!</value></data>
+  <data name="Home_Browse" xml:space="preserve"><value>Browse Ingredients</value></data>
+  <data name="Home_HowItWorks" xml:space="preserve"><value>How It Works</value></data>
+  <data name="Home_Step1_Title" xml:space="preserve"><value>1. Pick Ingredients</value></data>
+  <data name="Home_Step1_Desc" xml:space="preserve"><value>Browse our ingredient catalog by category and add what you have at home to your cart.</value></data>
+  <data name="Home_Step2_Title" xml:space="preserve"><value>2. Get Matched</value></data>
+  <data name="Home_Step2_Desc" xml:space="preserve"><value>Our algorithm finds recipes that fully or partially match your selected ingredients.</value></data>
+  <data name="Home_Step3_Title" xml:space="preserve"><value>3. Start Cooking</value></data>
+  <data name="Home_Step3_Desc" xml:space="preserve"><value>Follow step-by-step instructions for your chosen recipe and enjoy your meal!</value></data>
+
+  <!-- Ingredients page -->
+  <data name="Ing_Filter" xml:space="preserve"><value>Filter</value></data>
+  <data name="Ing_Search" xml:space="preserve"><value>Search ingredients...</value></data>
+  <data name="Ing_AllCategories" xml:space="preserve"><value>All Categories</value></data>
+  <data name="Ing_ViewCart" xml:space="preserve"><value>View Cart</value></data>
+  <data name="Ing_AddToCart" xml:space="preserve"><value>Add to Cart</value></data>
+  <data name="Ing_AllIngredients" xml:space="preserve"><value>All Ingredients</value></data>
+  <data name="Ing_Items" xml:space="preserve"><value>items</value></data>
+  <data name="Ing_NoResults" xml:space="preserve"><value>No ingredients match your search.</value></data>
+  <data name="Ing_NoFound" xml:space="preserve"><value>No ingredients found. Try a different category.</value></data>
+
+  <!-- Cart page -->
+  <data name="Cart_Title" xml:space="preserve"><value>My Cart</value></data>
+  <data name="Cart_Empty" xml:space="preserve"><value>Your cart is empty</value></data>
+  <data name="Cart_EmptyDesc" xml:space="preserve"><value>Browse ingredients and add them to your cart.</value></data>
+  <data name="Cart_BrowseIngredients" xml:space="preserve"><value>Browse Ingredients</value></data>
+  <data name="Cart_Ingredient" xml:space="preserve"><value>Ingredient</value></data>
+  <data name="Cart_Category" xml:space="preserve"><value>Category</value></data>
+  <data name="Cart_CalPer100" xml:space="preserve"><value>Calories/100g</value></data>
+  <data name="Cart_Qty" xml:space="preserve"><value>Qty</value></data>
+  <data name="Cart_TotalKcal" xml:space="preserve"><value>Total kcal</value></data>
+  <data name="Cart_Clear" xml:space="preserve"><value>Clear Cart</value></data>
+  <data name="Cart_ClearConfirm" xml:space="preserve"><value>Clear entire cart?</value></data>
+  <data name="Cart_ContinueShopping" xml:space="preserve"><value>Continue Shopping</value></data>
+  <data name="Cart_Summary" xml:space="preserve"><value>Summary</value></data>
+  <data name="Cart_TotalIngredients" xml:space="preserve"><value>Total ingredients:</value></data>
+  <data name="Cart_TotalCalories" xml:space="preserve"><value>Total calories:</value></data>
+  <data name="Cart_GetRecommendations" xml:space="preserve"><value>Get Recommendations</value></data>
+
+  <!-- Recommendations page -->
+  <data name="Rec_Title" xml:space="preserve"><value>Recipe Recommendations</value></data>
+  <data name="Rec_BackToCart" xml:space="preserve"><value>Back to Cart</value></data>
+  <data name="Rec_SearchLabel" xml:space="preserve"><value>Search Recipes by Name</value></data>
+  <data name="Rec_SearchPlaceholder" xml:space="preserve"><value>e.g. Chicken, Pasta...</value></data>
+  <data name="Rec_Search" xml:space="preserve"><value>Search</value></data>
+  <data name="Rec_Clear" xml:space="preserve"><value>Clear</value></data>
+  <data name="Rec_EmptyCart" xml:space="preserve"><value>Your cart is empty</value></data>
+  <data name="Rec_EmptyCartDesc" xml:space="preserve"><value>Add ingredients to your cart first to get recipe recommendations.</value></data>
+  <data name="Rec_NoMatch" xml:space="preserve"><value>No recipes found matching your ingredients. Try adding more ingredients to your cart.</value></data>
+  <data name="Rec_MatchingAgainst" xml:space="preserve"><value>Matching against</value></data>
+  <data name="Rec_Ingredients" xml:space="preserve"><value>ingredient(s):</value></data>
+  <data name="Rec_PerfectMatches" xml:space="preserve"><value>Perfect Matches</value></data>
+  <data name="Rec_PartialMatches" xml:space="preserve"><value>Partial Matches</value></data>
+  <data name="Rec_PerfectMatch" xml:space="preserve"><value>Perfect Match</value></data>
+  <data name="Rec_Matched" xml:space="preserve"><value>ingredients matched</value></data>
+  <data name="Rec_Missing" xml:space="preserve"><value>Missing:</value></data>
+  <data name="Rec_More" xml:space="preserve"><value>more</value></data>
+  <data name="Rec_ViewRecipe" xml:space="preserve"><value>View Recipe</value></data>
+
+  <!-- Recipe Details -->
+  <data name="Det_Prep" xml:space="preserve"><value>Prep</value></data>
+  <data name="Det_Cook" xml:space="preserve"><value>Cook</value></data>
+  <data name="Det_Servings" xml:space="preserve"><value>Servings</value></data>
+  <data name="Det_TotalCalories" xml:space="preserve"><value>Total calories</value></data>
+  <data name="Det_Ingredients" xml:space="preserve"><value>Ingredients</value></data>
+  <data name="Det_Instructions" xml:space="preserve"><value>Instructions</value></data>
+  <data name="Det_Missing" xml:space="preserve"><value>You're still missing:</value></data>
+  <data name="Det_HaveAll" xml:space="preserve"><value>You have all the ingredients for this recipe!</value></data>
+  <data name="Det_BackToRec" xml:space="preserve"><value>Back to Recommendations</value></data>
+  <data name="Det_AddMore" xml:space="preserve"><value>Add More Ingredients</value></data>
+
+  <!-- Recipes list page -->
+  <data name="RecList_Title" xml:space="preserve"><value>All Recipes</value></data>
+  <data name="RecList_Search" xml:space="preserve"><value>Search recipes by name...</value></data>
+  <data name="RecList_NoMatch" xml:space="preserve"><value>No recipes match your search.</value></data>
+  <data name="RecList_ViewRecipe" xml:space="preserve"><value>View Recipe</value></data>
+  <data name="RecList_Recipes" xml:space="preserve"><value>recipes</value></data>
+
+  <!-- Auth -->
+  <data name="Auth_WelcomeBack" xml:space="preserve"><value>Welcome back</value></data>
+  <data name="Auth_SignIn" xml:space="preserve"><value>Sign in to your Khohararik account</value></data>
+  <data name="Auth_Email" xml:space="preserve"><value>Email address</value></data>
+  <data name="Auth_Password" xml:space="preserve"><value>Password</value></data>
+  <data name="Auth_RememberMe" xml:space="preserve"><value>Remember me</value></data>
+  <data name="Auth_LogIn" xml:space="preserve"><value>Log in</value></data>
+  <data name="Auth_CreateAccount" xml:space="preserve"><value>Create a new account</value></data>
+  <data name="Auth_ForgotPassword" xml:space="preserve"><value>Forgot password?</value></data>
+  <data name="Auth_CreateTitle" xml:space="preserve"><value>Create account</value></data>
+  <data name="Auth_CreateSub" xml:space="preserve"><value>Join Khohararik to save your favourite recipes</value></data>
+  <data name="Auth_ConfirmPassword" xml:space="preserve"><value>Confirm password</value></data>
+  <data name="Auth_AlreadyHave" xml:space="preserve"><value>Already have an account?</value></data>
+
+  <!-- Footer -->
+  <data name="Footer_Copy" xml:space="preserve"><value>© 2026 Khohararik — Recipe Recommendation System</value></data>
+</root>

@@ -1,0 +1,124 @@
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Edit Recipe";
+}
+@model Khohararik.Models.Recipe
+@{
+    var allIngredients = ViewBag.Ingredients as List<Khohararik.Models.Ingredient> ?? new();
+    var recipeIngs = ViewBag.RecipeIngredients as Dictionary<int, decimal> ?? new();
+}
+
+<div class="card border-0 shadow-sm p-4">
+    <h4 class="fw-bold mb-4">Edit Recipe</h4>
+    <form asp-action="Edit" method="post" enctype="multipart/form-data">
+        @Html.AntiForgeryToken()
+        <input asp-for="Id" type="hidden" />
+
+        <div class="row g-3 mb-3">
+            <div class="col-md-8">
+                <label asp-for="Name" class="form-label fw-semibold"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="col-md-4">
+                <label asp-for="TotalCalories" class="form-label fw-semibold">Total Calories</label>
+                <input asp-for="TotalCalories" class="form-control" type="number" step="0.1" />
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Description" class="form-label fw-semibold"></label>
+            <textarea asp-for="Description" class="form-control" rows="2"></textarea>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Instructions" class="form-label fw-semibold">Instructions</label>
+            <textarea asp-for="Instructions" class="form-control" rows="6"></textarea>
+        </div>
+
+        <div class="row g-3 mb-3">
+            <div class="col-md-4">
+                <label asp-for="PrepTimeMinutes" class="form-label fw-semibold">Prep (min)</label>
+                <input asp-for="PrepTimeMinutes" class="form-control" type="number" />
+            </div>
+            <div class="col-md-4">
+                <label asp-for="CookTimeMinutes" class="form-label fw-semibold">Cook (min)</label>
+                <input asp-for="CookTimeMinutes" class="form-control" type="number" />
+            </div>
+            <div class="col-md-4">
+                <label asp-for="Servings" class="form-label fw-semibold">Servings</label>
+                <input asp-for="Servings" class="form-control" type="number" />
+            </div>
+        </div>
+
+        <div class="mb-4">
+            @if (!string.IsNullOrEmpty(Model.ImageUrl))
+            {
+                <div class="mb-2">
+                    <img src="@Model.ImageUrl" style="height:80px;border-radius:8px;" />
+                    <small class="text-muted ms-2">Current image</small>
+                </div>
+            }
+            <input asp-for="ImageUrl" type="hidden" />
+            <label class="form-label fw-semibold">Replace Image</label>
+            <input type="file" name="imageFile" class="form-control" accept="image/*" />
+        </div>
+
+        <h5 class="fw-bold mb-3">Ingredients</h5>
+        <div class="mb-2">
+            <input type="text" id="ingredientSearch" class="form-control form-control-sm" placeholder="Search ingredients..." />
+        </div>
+        <div class="card border bg-light p-3 mb-4" style="max-height: 400px; overflow-y: auto;" id="ingredientList">
+            @foreach (var ing in allIngredients)
+            {
+                var isChecked = recipeIngs.ContainsKey(ing.Id);
+                var weight = isChecked ? recipeIngs[ing.Id] : 100m;
+                <div class="row g-2 align-items-center mb-2 ingredient-row" data-name="@ing.Name.ToLower() @ing.Category.Name.ToLower()">
+                    <div class="col-auto">
+                        <input type="checkbox" name="selectedIngredients" value="@ing.Id"
+                               id="ing-@ing.Id" class="form-check-input ingredient-check"
+                               @(isChecked ? "checked" : "") />
+                    </div>
+                    <div class="col">
+                        <label for="ing-@ing.Id" class="form-check-label">
+                            @ing.Name <small class="text-muted">(@ing.Category.Name)</small>
+                        </label>
+                    </div>
+                    <div class="col-auto">
+                        <div class="input-group input-group-sm" style="width: 120px;">
+                            <input type="number" name="ingredientWeights" value="@weight" min="1" step="0.1"
+                                   class="form-control ingredient-weight" id="weight-@ing.Id"
+                                   @(!isChecked ? "disabled" : "") />
+                            <span class="input-group-text">g</span>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-success">Save Changes</button>
+            <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+<script>
+    // Live ingredient search
+    document.getElementById('ingredientSearch').addEventListener('input', function() {
+        const q = this.value.toLowerCase();
+        document.querySelectorAll('#ingredientList .ingredient-row').forEach(row => {
+            row.style.display = row.dataset.name.includes(q) ? '' : 'none';
+        });
+    });
+
+    document.querySelectorAll('.ingredient-check').forEach(cb => {
+        cb.addEventListener('change', function() {
+            const weightInput = document.getElementById('weight-' + this.value);
+            weightInput.disabled = !this.checked;
+            if (!this.checked) weightInput.value = 100;
+        });
+    });
+</script>
+}

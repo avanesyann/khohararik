@@ -1,0 +1,58 @@
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Recipes";
+}
+@model List<Khohararik.Models.Recipe>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h3 class="fw-bold mb-0">Recipes</h3>
+    <a asp-action="Create" class="btn btn-success"><i class="bi bi-plus-lg me-1"></i>New Recipe</a>
+</div>
+
+<div class="card border-0 shadow-sm">
+    <table class="table table-hover mb-0 align-middle">
+        <thead class="table-light">
+            <tr>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Calories</th>
+                <th>Ingredients</th>
+                <th>Prep/Cook</th>
+                <th class="text-end">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var r in Model)
+            {
+                <tr>
+                    <td>
+                        @if (!string.IsNullOrEmpty(r.ImageUrl))
+                        {
+                            <img src="@r.ImageUrl" style="width:50px;height:50px;object-fit:cover;border-radius:6px;" />
+                        }
+                        else { <span class="text-muted">—</span> }
+                    </td>
+                    <td class="fw-semibold">@r.Name</td>
+                    <td>@(r.TotalCalories > 0 ? r.TotalCalories + " kcal" : "—")</td>
+                    <td><span class="badge bg-info text-dark">@r.RecipeIngredients.Count</span></td>
+                    <td>
+                        <small>
+                            @(r.PrepTimeMinutes.HasValue ? r.PrepTimeMinutes + "min prep" : "")
+                            @(r.CookTimeMinutes.HasValue ? " / " + r.CookTimeMinutes + "min cook" : "")
+                        </small>
+                    </td>
+                    <td class="text-end">
+                        <a asp-action="Edit" asp-route-id="@r.Id" class="btn btn-sm btn-outline-primary me-1">
+                            <i class="bi bi-pencil"></i>
+                        </a>
+                        <form asp-action="Delete" asp-route-id="@r.Id" method="post" class="d-inline"
+                              onsubmit="return confirm('Delete this recipe?')">
+                            @Html.AntiForgeryToken()
+                            <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

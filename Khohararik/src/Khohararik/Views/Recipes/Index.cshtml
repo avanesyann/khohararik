@@ -1,0 +1,93 @@
+@model List<Khohararik.Models.Recipe>
+@{
+    ViewData["Title"] = "All Recipes";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="fw-bold mb-0"><i class="bi bi-journal-richtext me-2"></i>@L["RecList_Title"]</h2>
+    <span class="text-muted" id="recipe-count">@Model.Count @L["RecList_Recipes"]</span>
+</div>
+
+<!-- Live search -->
+<div class="mb-4">
+    <div class="input-group">
+        <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
+        <input type="text" id="recipe-search" class="form-control" placeholder="@L["RecList_Search"]" />
+        <button class="btn btn-outline-secondary" id="clear-recipe-search" style="display:none;" type="button">
+            <i class="bi bi-x-lg"></i>
+        </button>
+    </div>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">No recipes yet. Add some via the Admin panel.</div>
+}
+else
+{
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4" id="recipe-grid">
+        @foreach (var recipe in Model)
+        {
+            <div class="col recipe-item" data-name="@recipe.Name.ToLower()">
+                <div class="card recipe-card shadow-sm h-100">
+                    @if (!string.IsNullOrEmpty(recipe.ImageUrl))
+                    {
+                        <img src="@recipe.ImageUrl" alt="@recipe.Name" class="card-img-top" />
+                    }
+                    else
+                    {
+                        <div class="d-flex align-items-center justify-content-center bg-light" style="height:200px;font-size:4rem;">🍽️</div>
+                    }
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title fw-bold">@recipe.Name</h5>
+                        @if (!string.IsNullOrEmpty(recipe.Description))
+                        {
+                            <p class="card-text text-muted small">@(recipe.Description.Length > 100 ? recipe.Description.Substring(0, 100) + "..." : recipe.Description)</p>
+                        }
+                        <div class="d-flex gap-3 mb-3 text-muted small">
+                            @if (recipe.TotalCalories > 0)
+                            {
+                                <span><i class="bi bi-fire"></i> @recipe.TotalCalories kcal</span>
+                            }
+                            @if (recipe.CookTimeMinutes.HasValue)
+                            {
+                                <span><i class="bi bi-clock"></i> @recipe.CookTimeMinutes min</span>
+                            }
+                        </div>
+                        <a asp-action="Details" asp-route-id="@recipe.Id" class="btn btn-outline-success mt-auto">
+                            <i class="bi bi-book-open me-1"></i>@L["RecList_ViewRecipe"]
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    <div id="no-results" class="alert alert-info d-none">@L["RecList_NoMatch"]</div>
+}
+
+@section Scripts {
+<script>
+    const searchInput = document.getElementById('recipe-search');
+    const clearBtn = document.getElementById('clear-recipe-search');
+    const items = document.querySelectorAll('.recipe-item');
+    const countEl = document.getElementById('recipe-count');
+    const noResults = document.getElementById('no-results');
+    const recipesLabel = '@L["RecList_Recipes"]';
+
+    function filterRecipes() {
+        const q = searchInput.value.toLowerCase().trim();
+        clearBtn.style.display = q ? 'inline-block' : 'none';
+        let visible = 0;
+        items.forEach(item => {
+            const match = !q || item.dataset.name.includes(q);
+            item.style.display = match ? '' : 'none';
+            if (match) visible++;
+        });
+        countEl.textContent = visible + ' ' + recipesLabel;
+        if (noResults) noResults.classList.toggle('d-none', visible > 0);
+    }
+
+    searchInput.addEventListener('input', filterRecipes);
+    clearBtn.addEventListener('click', () => { searchInput.value = ''; filterRecipes(); searchInput.focus(); });
+</script>
+}

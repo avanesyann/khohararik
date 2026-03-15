@@ -1,0 +1,52 @@
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Edit Ingredient";
+}
+@model Khohararik.Models.Ingredient
+
+<div class="row justify-content-center">
+    <div class="col-md-7">
+        <div class="card border-0 shadow-sm p-4">
+            <h4 class="fw-bold mb-4">Edit Ingredient</h4>
+            <form asp-action="Edit" method="post" enctype="multipart/form-data">
+                @Html.AntiForgeryToken()
+                <input asp-for="Id" type="hidden" />
+                <div class="mb-3">
+                    <label asp-for="Name" class="form-label fw-semibold"></label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="CategoryId" class="form-label fw-semibold">Category</label>
+                    <select asp-for="CategoryId" asp-items="ViewBag.Categories" class="form-select"></select>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="CaloriesPer100g" class="form-label fw-semibold">Calories per 100g</label>
+                        <input asp-for="CaloriesPer100g" class="form-control" type="number" step="0.1" />
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="DefaultWeight" class="form-label fw-semibold">Default Weight (g)</label>
+                        <input asp-for="DefaultWeight" class="form-control" type="number" step="0.1" />
+                    </div>
+                </div>
+                <div class="mb-3">
+                    @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                    {
+                        <div class="mb-2">
+                            <img src="@Model.ImageUrl" style="height:80px;border-radius:8px;" />
+                            <small class="text-muted ms-2">Current image</small>
+                        </div>
+                    }
+                    <input asp-for="ImageUrl" type="hidden" />
+                    <label class="form-label fw-semibold">Replace Image</label>
+                    <input type="file" name="imageFile" class="form-control" accept="image/*" />
+                </div>
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-success">Save Changes</button>
+                    <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,177 @@
+@model Khohararik.ViewModels.CartViewModel
+@{
+    ViewData["Title"] = "My Cart";
+}
+
+<div class="row">
+    <div class="col-lg-8">
+        <h2 class="fw-bold mb-4"><i class="bi bi-cart3 me-2"></i>@L["Cart_Title"]</h2>
+
+        @if (!Model.Items.Any())
+        {
+            <div class="card border-0 shadow-sm p-5 text-center">
+                <div class="display-1 mb-3">🛒</div>
+                <h4>@L["Cart_Empty"]</h4>
+                <p class="text-muted">@L["Cart_EmptyDesc"]</p>
+                <a asp-controller="Ingredients" asp-action="Index" class="btn btn-success">@L["Cart_BrowseIngredients"]</a>
+            </div>
+        }
+        else
+        {
+            <div class="card border-0 shadow-sm mb-3">
+                <div class="card-body p-0">
+                    <table class="table mb-0 align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>@L["Cart_Ingredient"]</th>
+                                <th>@L["Cart_Category"]</th>
+                                <th>@L["Cart_CalPer100"]</th>
+                                <th class="text-center">@L["Cart_Qty"]</th>
+                                <th class="text-end">@L["Cart_TotalKcal"]</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.Items)
+                            {
+                                <tr id="cart-row-@item.IngredientId">
+                                    <td>
+                                        <div class="d-flex align-items-center gap-2">
+                                            @if (!string.IsNullOrEmpty(item.ImageUrl))
+                                            {
+                                                <img src="@item.ImageUrl" alt="@item.Name"
+                                                     style="width:48px;height:48px;object-fit:cover;border-radius:8px;" />
+                                            }
+                                            else
+                                            {
+                                                <div class="d-flex align-items-center justify-content-center bg-light rounded"
+                                                     style="width:48px;height:48px;font-size:1.5rem;">🥗</div>
+                                            }
+                                            <span class="fw-semibold">@item.Name</span>
+                                        </div>
+                                    </td>
+                                    <td><span class="badge bg-secondary">@item.CategoryName</span></td>
+                                    <td>@item.CaloriesPer100g kcal</td>
+                                    <td class="text-center">
+                                        <div class="d-flex align-items-center justify-content-center gap-1">
+                                            <button class="btn btn-sm btn-outline-danger qty-btn"
+                                                    data-id="@item.IngredientId" data-action="decrease">−</button>
+                                            <span class="fw-bold px-2 qty-display" data-id="@item.IngredientId">@item.Quantity</span>
+                                            <button class="btn btn-sm btn-outline-success qty-btn"
+                                                    data-id="@item.IngredientId" data-action="increase">+</button>
+                                        </div>
+                                    </td>
+                                    <td class="text-end fw-semibold">@item.TotalCalories.ToString("0.#") kcal</td>
+                                    <td class="text-end">
+                                        <button class="btn btn-sm btn-outline-danger remove-btn" data-id="@item.IngredientId">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-between">
+                <form asp-action="Clear" method="post">
+                    @Html.AntiForgeryToken()
+                    <button class="btn btn-outline-danger" onclick="return confirm('@L["Cart_ClearConfirm"]')">
+                        <i class="bi bi-trash me-1"></i>@L["Cart_Clear"]
+                    </button>
+                </form>
+                <a asp-controller="Ingredients" asp-action="Index" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left me-1"></i>@L["Cart_ContinueShopping"]
+                </a>
+            </div>
+        }
+    </div>
+
+    <!-- Summary panel -->
+    <div class="col-lg-4 mt-4 mt-lg-0">
+        <div class="card border-0 shadow-sm p-4 sticky-top" style="top: 80px;">
+            <h5 class="fw-bold mb-3">@L["Cart_Summary"]</h5>
+            <div class="d-flex justify-content-between mb-2">
+                <span class="text-muted">@L["Cart_TotalIngredients"]</span>
+                <span class="fw-bold">@Model.TotalItems</span>
+            </div>
+            <div class="d-flex justify-content-between mb-3">
+                <span class="text-muted">@L["Cart_TotalCalories"]</span>
+                <span class="fw-bold">@Model.TotalCalories.ToString("0.#") kcal</span>
+            </div>
+            <hr />
+            <a asp-controller="Recipes" asp-action="Recommendations"
+               class="btn btn-success w-100 btn-lg fw-bold @(!Model.Items.Any() ? "disabled" : "")">
+                <i class="bi bi-stars me-2"></i>@L["Cart_GetRecommendations"]
+            </a>
+        </div>
+    </div>
+</div>
+
+@Html.AntiForgeryToken()
+
+@section Scripts {
+<script>
+    function getToken() {
+        return document.querySelector('input[name="__RequestVerificationToken"]').value;
+    }
+
+    function updateCartBadge() {
+        fetch('/Cart/Count').then(r => r.json()).then(d => {
+            document.getElementById('cart-count').textContent = d.count;
+        });
+    }
+
+    document.querySelectorAll('.qty-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const id = this.dataset.id;
+            const action = this.dataset.action;
+            const display = document.querySelector(`.qty-display[data-id="${id}"]`);
+            let qty = parseInt(display.textContent);
+            qty = action === 'increase' ? qty + 1 : qty - 1;
+
+            fetch('/Cart/UpdateQuantity', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'RequestVerificationToken': getToken()
+                },
+                body: `id=${id}&quantity=${qty}`
+            }).then(r => r.json()).then(d => {
+                if (d.success) {
+                    updateCartBadge();
+                    if (qty <= 0) {
+                        document.getElementById('cart-row-' + id)?.remove();
+                        location.reload();
+                    } else {
+                        display.textContent = qty;
+                    }
+                }
+            });
+        });
+    });
+
+    document.querySelectorAll('.remove-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const id = this.dataset.id;
+            fetch('/Cart/Remove', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'RequestVerificationToken': getToken()
+                },
+                body: `id=${id}`
+            }).then(r => r.json()).then(d => {
+                if (d.success) {
+                    document.getElementById('cart-row-' + id)?.remove();
+                    updateCartBadge();
+                    location.reload();
+                }
+            });
+        });
+    });
+</script>
+}

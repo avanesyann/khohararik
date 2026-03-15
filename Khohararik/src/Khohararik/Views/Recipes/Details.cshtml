@@ -1,0 +1,151 @@
+@model Khohararik.Models.Recipe
+@{
+    ViewData["Title"] = Model.Name;
+    var cartIds = ViewBag.CartIngredientIds as HashSet<int> ?? new HashSet<int>();
+}
+
+<nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+        <li class="breadcrumb-item"><a asp-controller="Recipes" asp-action="Index">Recipes</a></li>
+        <li class="breadcrumb-item active">@Model.Name</li>
+    </ol>
+</nav>
+
+<div class="row g-4">
+    <!-- Image & meta -->
+    <div class="col-lg-5">
+        @if (!string.IsNullOrEmpty(Model.ImageUrl))
+        {
+            <img src="@Model.ImageUrl" alt="@Model.Name"
+                 class="img-fluid rounded shadow" style="width:100%;max-height:400px;object-fit:cover;" />
+        }
+        else
+        {
+            <div class="d-flex align-items-center justify-content-center bg-light rounded shadow"
+                 style="height:300px;font-size:6rem;">🍽️</div>
+        }
+
+        @{
+            bool hasStats = Model.PrepTimeMinutes.HasValue || Model.CookTimeMinutes.HasValue
+                            || Model.Servings.HasValue || Model.TotalCalories > 0;
+        }
+        @if (hasStats)
+        {
+        <div class="card border-0 shadow-sm p-3 mt-3">
+            <div class="row text-center g-2">
+                @if (Model.PrepTimeMinutes.HasValue)
+                {
+                    <div class="col-4">
+                        <div class="fw-bold">@Model.PrepTimeMinutes min</div>
+                <small class="text-muted">@L["Det_Prep"]</small>
+                    </div>
+                }
+                @if (Model.CookTimeMinutes.HasValue)
+                {
+                    <div class="col-4">
+                        <div class="fw-bold">@Model.CookTimeMinutes min</div>
+                        <small class="text-muted">@L["Det_Cook"]</small>
+                    </div>
+                }
+                @if (Model.Servings.HasValue)
+                {
+                    <div class="col-4">
+                        <div class="fw-bold">@Model.Servings</div>
+                        <small class="text-muted">@L["Det_Servings"]</small>
+                    </div>
+                }
+                @if (Model.TotalCalories > 0)
+                {
+                    <div class="col-12 border-top pt-2">
+                        <div class="fw-bold text-danger">@Model.TotalCalories kcal</div>
+                        <small class="text-muted">@L["Det_TotalCalories"]</small>
+                    </div>
+                }
+            </div>
+        </div>
+        }
+    </div>
+
+    <!-- Content -->
+    <div class="col-lg-7">
+        <h1 class="fw-bold mb-2">@Model.Name</h1>
+
+        @if (!string.IsNullOrEmpty(Model.Description))
+        {
+            <p class="text-muted lead mb-4">@Model.Description</p>
+        }
+
+        <!-- Ingredients -->
+        <h4 class="fw-bold mb-3"><i class="bi bi-list-check me-2"></i>@L["Det_Ingredients"]</h4>
+        <div class="row row-cols-2 g-2 mb-4">
+            @foreach (var ri in Model.RecipeIngredients.OrderBy(r => r.Ingredient.Name))
+            {
+                var hasIt = cartIds.Contains(ri.IngredientId);
+                <div class="col">
+                    <div class="d-flex align-items-center gap-2 p-2 rounded @(hasIt ? "bg-success bg-opacity-10" : "bg-danger bg-opacity-10")">
+                        <i class="bi @(hasIt ? "bi-check-circle-fill text-success" : "bi-x-circle text-danger")"></i>
+                        <div>
+                            <div class="fw-semibold" style="font-size:.9rem;">@ri.Ingredient.Name</div>
+                            <small class="text-muted">@ri.RequiredWeight @(ri.Unit ?? "g")</small>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        @if (cartIds.Any())
+        {
+            var missing = Model.RecipeIngredients
+                .Where(ri => !cartIds.Contains(ri.IngredientId))
+                .Select(ri => ri.Ingredient.Name).ToList();
+            if (missing.Any())
+            {
+                <div class="alert alert-warning">
+                    <i class="bi bi-bag me-2"></i>
+                    @L["Det_Missing"] <strong>@string.Join(", ", missing)</strong>
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-success">
+                    <i class="bi bi-check-circle-fill me-2"></i>
+                    @L["Det_HaveAll"]
+                </div>
+            }
+        }
+
+        <!-- Instructions -->
+        @if (!string.IsNullOrEmpty(Model.Instructions))
+        {
+            <h4 class="fw-bold mb-3"><i class="bi bi-list-ol me-2"></i>@L["Det_Instructions"]</h4>
+            <div class="card border-0 bg-light p-4">
+                @{
+                    var steps = Model.Instructions.Split('\n', StringSplitOptions.RemoveEmptyEntries);
+                }
+                @if (steps.Length > 1)
+                {
+                    <ol class="mb-0">
+                        @foreach (var step in steps)
+                        {
+                            <li class="mb-2">@step.Trim()</li>
+                        }
+                    </ol>
+                }
+                else
+                {
+                    <p class="mb-0">@Model.Instructions</p>
+                }
+            </div>
+        }
+    </div>
+</div>
+
+<div class="mt-4 d-flex gap-2">
+    <a asp-action="Recommendations" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left me-1"></i>@L["Det_BackToRec"]
+    </a>
+    <a asp-controller="Ingredients" asp-action="Index" class="btn btn-success">
+        <i class="bi bi-plus me-1"></i>@L["Det_AddMore"]
+    </a>
+</div>
