@@ -104,6 +104,7 @@
   <!-- Recipe Details -->
   <data name="Det_Prep" xml:space="preserve"><value>Prep</value></data>
   <data name="Det_Cook" xml:space="preserve"><value>Cook</value></data>
+  <data name="Det_Min" xml:space="preserve"><value>min</value></data>
   <data name="Det_Servings" xml:space="preserve"><value>Servings</value></data>
   <data name="Det_TotalCalories" xml:space="preserve"><value>Total calories</value></data>
   <data name="Det_Ingredients" xml:space="preserve"><value>Ingredients</value></data>

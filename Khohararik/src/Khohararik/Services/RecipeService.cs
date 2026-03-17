@@ -50,22 +50,38 @@ public class RecipeService : IRecipeService
 
     public async Task UpdateAsync(Recipe recipe, Dictionary<int, decimal> ingredientWeights)
     {
-        _db.Recipes.Update(recipe);
+        await using var transaction = await _db.Database.BeginTransactionAsync();
 
-        // Replace all recipe ingredients
-        var existing = _db.RecipeIngredients.Where(ri => ri.RecipeId == recipe.Id);
-        _db.RecipeIngredients.RemoveRange(existing);
+        var existing = await _db.Recipes.FindAsync(recipe.Id);
+        if (existing == null) return;
 
+        existing.Name            = recipe.Name;
+        existing.Description     = recipe.Description;
+        existing.Instructions    = recipe.Instructions;
+        existing.TotalCalories   = recipe.TotalCalories;
+        existing.ImageUrl        = recipe.ImageUrl;
+        existing.PrepTimeMinutes = recipe.PrepTimeMinutes;
+        existing.CookTimeMinutes = recipe.CookTimeMinutes;
+        existing.Servings        = recipe.Servings;
+
+        // Delete existing ingredient links directly (bypasses change-tracker)
+        await _db.RecipeIngredients
+            .Where(ri => ri.RecipeId == recipe.Id)
+            .ExecuteDeleteAsync();
+
+        // Insert new ingredient links
         foreach (var (ingredientId, weight) in ingredientWeights)
         {
             _db.RecipeIngredients.Add(new RecipeIngredient
             {
-                RecipeId = recipe.Id,
-                IngredientId = ingredientId,
+                RecipeId       = recipe.Id,
+                IngredientId   = ingredientId,
                 RequiredWeight = weight
             });
         }
+
         await _db.SaveChangesAsync();
+        await transaction.CommitAsync();
     }
 
     public async Task DeleteAsync(int id)

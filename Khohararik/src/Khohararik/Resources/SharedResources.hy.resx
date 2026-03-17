@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:element name="root" msdata:IsDataSet="true">
@@ -102,6 +102,7 @@
   <!-- Recipe Details -->
   <data name="Det_Prep" xml:space="preserve"><value>Նախապատ.</value></data>
   <data name="Det_Cook" xml:space="preserve"><value>Եփում</value></data>
+  <data name="Det_Min" xml:space="preserve"><value>ր.</value></data>
   <data name="Det_Servings" xml:space="preserve"><value>Չափաբաժին</value></data>
   <data name="Det_TotalCalories" xml:space="preserve"><value>Ընդ. կալորիա</value></data>
   <data name="Det_Ingredients" xml:space="preserve"><value>Բաղադրիչներ</value></data>

@@ -1,4 +1,4 @@
-using Khohararik.Models;
+﻿using Khohararik.Models;
 using Khohararik.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -32,8 +32,7 @@ public class RecipesController : Controller
     }
 
     [HttpPost, ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create(Recipe recipe, IFormFile? imageFile,
-        int[]? selectedIngredients, decimal[]? ingredientWeights)
+    public async Task<IActionResult> Create(Recipe recipe, IFormFile? imageFile, int[]? selectedIngredients)
     {
         if (!ModelState.IsValid)
         {
@@ -44,7 +43,7 @@ public class RecipesController : Controller
         if (imageFile != null && imageFile.Length > 0)
             recipe.ImageUrl = await SaveImageAsync(imageFile);
 
-        var weights = BuildWeightDictionary(selectedIngredients, ingredientWeights);
+        var weights = BuildWeightsFromRequest(selectedIngredients);
         await _recipeService.CreateAsync(recipe, weights);
         TempData["Success"] = "Recipe created.";
         return RedirectToAction(nameof(Index));
@@ -62,18 +61,19 @@ public class RecipesController : Controller
 
     [HttpPost, ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(Recipe recipe, IFormFile? imageFile,
-        int[]? selectedIngredients, decimal[]? ingredientWeights)
+        int[]? selectedIngredients)
     {
         if (!ModelState.IsValid)
         {
             ViewBag.Ingredients = await _ingredientService.GetAllAsync();
+            ViewBag.RecipeIngredients = BuildWeightsFromRequest(selectedIngredients);
             return View(recipe);
         }
 
         if (imageFile != null && imageFile.Length > 0)
             recipe.ImageUrl = await SaveImageAsync(imageFile);
 
-        var weights = BuildWeightDictionary(selectedIngredients, ingredientWeights);
+        var weights = BuildWeightsFromRequest(selectedIngredients);
         await _recipeService.UpdateAsync(recipe, weights);
         TempData["Success"] = "Recipe updated.";
         return RedirectToAction(nameof(Index));
@@ -87,14 +87,15 @@ public class RecipesController : Controller
         return RedirectToAction(nameof(Index));
     }
 
-    private Dictionary<int, decimal> BuildWeightDictionary(int[]? ids, decimal[]? weights)
+    private Dictionary<int, decimal> BuildWeightsFromRequest(int[]? ids)
     {
         var dict = new Dictionary<int, decimal>();
         if (ids == null) return dict;
-        for (int i = 0; i < ids.Length; i++)
+        foreach (var id in ids)
         {
-            var w = (weights != null && i < weights.Length) ? weights[i] : 100m;
-            if (w > 0) dict[ids[i]] = w;
+            var raw = Request.Form[$"w_{id}"].FirstOrDefault();
+            dict[id] = decimal.TryParse(raw, System.Globalization.NumberStyles.Any,
+                System.Globalization.CultureInfo.InvariantCulture, out var w) && w > 0 ? w : 100m;
         }
         return dict;
     }

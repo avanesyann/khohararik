@@ -1,4 +1,4 @@
-@{
+﻿@{
     Layout = "_Layout";
     ViewData["Title"] = "Edit Recipe";
 }
@@ -86,9 +86,9 @@
                     </div>
                     <div class="col-auto">
                         <div class="input-group input-group-sm" style="width: 120px;">
-                            <input type="number" name="ingredientWeights" value="@weight" min="1" step="0.1"
+                            <input type="number" name="w_@ing.Id" value="@weight" min="1" step="0.1"
                                    class="form-control ingredient-weight" id="weight-@ing.Id"
-                                   @(!isChecked ? "disabled" : "") />
+                                   @(isChecked ? "" : "disabled") />
                             <span class="input-group-text">g</span>
                         </div>
                     </div>

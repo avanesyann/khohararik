@@ -37,14 +37,14 @@
                 @if (Model.PrepTimeMinutes.HasValue)
                 {
                     <div class="col-4">
-                        <div class="fw-bold">@Model.PrepTimeMinutes min</div>
+                        <div class="fw-bold">@Model.PrepTimeMinutes @L["Det_Min"]</div>
                 <small class="text-muted">@L["Det_Prep"]</small>
                     </div>
                 }
                 @if (Model.CookTimeMinutes.HasValue)
                 {
                     <div class="col-4">
-                        <div class="fw-bold">@Model.CookTimeMinutes min</div>
+                        <div class="fw-bold">@Model.CookTimeMinutes @L["Det_Min"]</div>
                         <small class="text-muted">@L["Det_Cook"]</small>
                     </div>
                 }
