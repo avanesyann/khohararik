@@ -1,0 +1,77 @@
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Users";
+}
+@model List<(Microsoft.AspNetCore.Identity.IdentityUser User, bool IsAdmin)>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h3 class="fw-bold mb-0">Users</h3>
+</div>
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show">
+        @TempData["Error"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<div class="mb-3">
+    <input type="text" id="adminSearch" class="form-control" placeholder="Search by email…">
+</div>
+
+<div class="card border-0 shadow-sm">
+    <table class="table table-hover mb-0 align-middle">
+        <thead class="table-light">
+            <tr>
+                <th>Email</th>
+                <th>Role</th>
+                <th class="text-end">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var (user, isAdmin) in Model)
+            {
+                <tr class="searchable-row" data-name="@user.Email?.ToLower()">
+                    <td class="fw-semibold">@user.Email</td>
+                    <td>
+                        @if (isAdmin)
+                        {
+                            <span class="badge bg-success">Admin</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary">User</span>
+                        }
+                    </td>
+                    <td class="text-end">
+                        <form asp-action="ToggleAdmin" method="post" class="d-inline"
+                              onsubmit="return confirm('@(isAdmin ? "Remove admin from" : "Make admin:") @user.Email?')">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="userId" value="@user.Id" />
+                            <button class="btn btn-sm @(isAdmin ? "btn-outline-danger" : "btn-outline-success")">
+                                <i class="bi @(isAdmin ? "bi-shield-x" : "bi-shield-check") me-1"></i>
+                                @(isAdmin ? "Remove Admin" : "Make Admin")
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div id="noResults" class="text-center text-muted py-4 d-none">No users found.</div>
+</div>
+
+<script>
+    document.getElementById('adminSearch').addEventListener('input', function () {
+        const q = this.value.toLowerCase();
+        const rows = document.querySelectorAll('.searchable-row');
+        let visible = 0;
+        rows.forEach(r => {
+            const match = r.dataset.name.includes(q);
+            r.classList.toggle('d-none', !match);
+            if (match) visible++;
+        });
+        document.getElementById('noResults').classList.toggle('d-none', visible > 0);
+    });
+</script>
