@@ -9,6 +9,10 @@
     <a asp-action="Create" class="btn btn-success"><i class="bi bi-plus-lg me-1"></i>New Ingredient</a>
 </div>
 
+<div class="mb-3">
+    <input type="text" id="adminSearch" class="form-control" placeholder="Search by name or category…" autofocus>
+</div>
+
 <div class="card border-0 shadow-sm">
     <table class="table table-hover mb-0 align-middle">
         <thead class="table-light">
@@ -24,7 +28,7 @@
         <tbody>
             @foreach (var ing in Model)
             {
-                <tr>
+                <tr class="searchable-row" data-name="@ing.Name.ToLower() @ing.Category.Name.ToLower()">
                     <td>
                         @if (!string.IsNullOrEmpty(ing.ImageUrl))
                         {
@@ -50,4 +54,19 @@
             }
         </tbody>
     </table>
+    <div id="noResults" class="text-center text-muted py-4 d-none">No results found.</div>
 </div>
+
+<script>
+    document.getElementById('adminSearch').addEventListener('input', function () {
+        const q = this.value.toLowerCase();
+        const rows = document.querySelectorAll('.searchable-row');
+        let visible = 0;
+        rows.forEach(r => {
+            const match = r.dataset.name.includes(q);
+            r.classList.toggle('d-none', !match);
+            if (match) visible++;
+        });
+        document.getElementById('noResults').classList.toggle('d-none', visible > 0);
+    });
+</script>

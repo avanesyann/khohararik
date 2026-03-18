@@ -121,14 +121,24 @@
             <h4 class="fw-bold mb-3"><i class="bi bi-list-ol me-2"></i>@L["Det_Instructions"]</h4>
             <div class="card border-0 bg-light p-4">
                 @{
-                    var steps = Model.Instructions.Split('\n', StringSplitOptions.RemoveEmptyEntries);
+                    var allLines = Model.Instructions.Split(new[]{'\r','\n'}, StringSplitOptions.RemoveEmptyEntries);
+                    // Remove lines that are only step labels like "Step 1", "1.", "Step1:" etc.
+                    var stepLabelPattern = new System.Text.RegularExpressions.Regex(
+                        @"^\s*(step\s*\d+\.?:?|(\d+)\.\s*)\s*$",
+                        System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+                    var steps = allLines.Where(l => !stepLabelPattern.IsMatch(l)).ToArray();
                 }
                 @if (steps.Length > 1)
                 {
                     <ol class="mb-0">
                         @foreach (var step in steps)
                         {
-                            <li class="mb-2">@step.Trim()</li>
+                            // Strip leading "1." or "Step 1:" prefixes from the step text itself
+                            var text = System.Text.RegularExpressions.Regex.Replace(
+                                step.Trim(),
+                                @"^(step\s*\d+\.?\s*:?\s*|\d+\.\s*)",
+                                "", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+                            <li class="mb-2">@text</li>
                         }
                     </ol>
                 }
