@@ -58,7 +58,7 @@
                 @if (Model.TotalCalories > 0)
                 {
                     <div class="col-12 border-top pt-2">
-                        <div class="fw-bold text-danger">@Model.TotalCalories kcal</div>
+                        <div class="fw-bold text-danger">@Model.TotalCalories @L["Kcal"]</div>
                         <small class="text-muted">@L["Det_TotalCalories"]</small>
                     </div>
                 }
@@ -87,7 +87,7 @@
                         <i class="bi @(hasIt ? "bi-check-circle-fill text-success" : "bi-x-circle text-danger")"></i>
                         <div>
                             <div class="fw-semibold" style="font-size:.9rem;">@ri.Ingredient.Name</div>
-                            <small class="text-muted">@ri.RequiredWeight @(ri.Unit ?? "g")</small>
+                            <small class="text-muted">@ri.RequiredWeight @L["Gram"]</small>
                         </div>
                     </div>
                 </div>

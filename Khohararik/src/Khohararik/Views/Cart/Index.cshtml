@@ -51,7 +51,7 @@
                                         </div>
                                     </td>
                                     <td><span class="badge bg-secondary">@item.CategoryName</span></td>
-                                    <td>@item.CaloriesPer100g kcal</td>
+                                    <td>@item.CaloriesPer100g @L["Kcal"]</td>
                                     <td class="text-center">
                                         <div class="d-flex align-items-center justify-content-center gap-1">
                                             <button class="btn btn-sm btn-outline-danger qty-btn"
@@ -61,7 +61,7 @@
                                                     data-id="@item.IngredientId" data-action="increase">+</button>
                                         </div>
                                     </td>
-                                    <td class="text-end fw-semibold">@item.TotalCalories.ToString("0.#") kcal</td>
+                                    <td class="text-end fw-semibold">@item.TotalCalories.ToString("0.#") @L["Kcal"]</td>
                                     <td class="text-end">
                                         <button class="btn btn-sm btn-outline-danger remove-btn" data-id="@item.IngredientId">
                                             <i class="bi bi-trash"></i>
@@ -98,7 +98,7 @@
             </div>
             <div class="d-flex justify-content-between mb-3">
                 <span class="text-muted">@L["Cart_TotalCalories"]</span>
-                <span class="fw-bold">@Model.TotalCalories.ToString("0.#") kcal</span>
+                <span class="fw-bold">@Model.TotalCalories.ToString("0.#") @L["Kcal"]</span>
             </div>
             <hr />
             <a asp-controller="Recipes" asp-action="Recommendations"

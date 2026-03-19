@@ -103,6 +103,8 @@
   <data name="Det_Prep" xml:space="preserve"><value>Подготовка</value></data>
   <data name="Det_Cook" xml:space="preserve"><value>Готовка</value></data>
   <data name="Det_Min" xml:space="preserve"><value>мин</value></data>
+  <data name="Kcal" xml:space="preserve"><value>ккал</value></data>
+  <data name="Gram" xml:space="preserve"><value>г</value></data>
   <data name="Det_Servings" xml:space="preserve"><value>Порций</value></data>
   <data name="Det_TotalCalories" xml:space="preserve"><value>Всего калорий</value></data>
   <data name="Det_Ingredients" xml:space="preserve"><value>Ингредиенты</value></data>

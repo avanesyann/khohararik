@@ -47,7 +47,7 @@ else
                         <div class="d-flex gap-3 mb-3 text-muted small">
                             @if (recipe.TotalCalories > 0)
                             {
-                                <span><i class="bi bi-fire"></i> @recipe.TotalCalories kcal</span>
+                                <span><i class="bi bi-fire"></i> @recipe.TotalCalories @L["Kcal"]</span>
                             }
                             @if (recipe.CookTimeMinutes.HasValue)
                             {
