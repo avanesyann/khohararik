@@ -34,7 +34,7 @@
                         <tbody>
                             @foreach (var item in Model.Items)
                             {
-                                <tr id="cart-row-@item.IngredientId" data-cal="@item.CaloriesPer100g">
+                                <tr id="cart-row-@item.IngredientId" data-cal="@item.CaloriesPer100g" data-weight="@item.DefaultWeight">
                                     <td>
                                         <div class="d-flex align-items-center gap-2">
                                             @if (!string.IsNullOrEmpty(item.ImageUrl))
@@ -60,7 +60,6 @@
                                             <button class="btn btn-sm btn-outline-success qty-btn"
                                                     data-id="@item.IngredientId" data-action="increase">+</button>
                                         </div>
-                                        <div class="text-muted" style="font-size:0.7rem;">×100@(L["Gram"])</div>
                                     </td>
                                     <td class="text-end fw-semibold row-total" data-id="@item.IngredientId">@item.TotalCalories.ToString("0.#") @L["Kcal"]</td>
                                     <td class="text-end">
@@ -128,12 +127,14 @@
 
     function recalcSummary() {
         let total = 0;
+        document.querySelectorAll('#cart-row-[id]').forEach(() => {});
         document.querySelectorAll('tr[id^="cart-row-"]').forEach(row => {
             const cal = parseFloat(row.dataset.cal) || 0;
+            const weight = parseFloat(row.dataset.weight) || 100;
             const id = row.id.replace('cart-row-', '');
             const qtyEl = document.querySelector(`.qty-display[data-id="${id}"]`);
             const qty = qtyEl ? parseInt(qtyEl.textContent) || 0 : 0;
-            total += cal * qty;
+            total += cal * weight / 100 * qty;
         });
         const summaryEl = document.getElementById('summary-total-cal');
         if (summaryEl) summaryEl.textContent = total.toFixed(1).replace(/\.0$/, '') + ' ' + kcalLabel;
@@ -143,8 +144,9 @@
         const row = document.getElementById('cart-row-' + id);
         if (!row) return;
         const cal = parseFloat(row.dataset.cal) || 0;
+        const weight = parseFloat(row.dataset.weight) || 100;
         const qty = parseInt(document.querySelector(`.qty-display[data-id="${id}"]`)?.textContent) || 0;
-        const rowTotal = (cal * qty).toFixed(1).replace(/\.0$/, '');
+        const rowTotal = (cal * weight / 100 * qty).toFixed(1).replace(/\.0$/, '');
         const cell = document.querySelector(`.row-total[data-id="${id}"]`);
         if (cell) cell.textContent = rowTotal + ' ' + kcalLabel;
     }

@@ -10,5 +10,5 @@ public class CartItemViewModel
     public int Quantity { get; set; }
     public string CategoryName { get; set; } = string.Empty;
 
-    public decimal TotalCalories => CaloriesPer100g * Quantity;
+    public decimal TotalCalories => CaloriesPer100g * DefaultWeight / 100 * Quantity;
 }
