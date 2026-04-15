@@ -133,3 +133,9 @@ The codebase is structured for easy addition of:
 | Frontend  | Razor Views + Bootstrap 5           |
 | Icons     | Bootstrap Icons                     |
 | Seeding   | Python 3 + pyodbc                   |
+
+---
+
+## 📜 License
+
+Distributed under the MIT License. See [`LICENSE`](https://github.com/avanesyann/khohararik/blob/main/LICENSE) for more information.
